@@ -1,6 +1,7 @@
 import java.util.Stack;
 
 public class P1_2 {
+	public static final int ITERATIONS = 1000;
 	
 	static long combinatorio_iterativo(int n, int k) {
 		
@@ -72,26 +73,50 @@ public class P1_2 {
 	}
 
 	public static void main(String[] args) {
-		long start, elapsed;
+		long sum, elapsed_mean, start;
 		
+		long result = 0;
+		
+		/*
+		 * ITERATIVO
+		 */
 		System.out.println("[ ITERATIVO ]");
-		start = System.nanoTime();
-		long result = combinatorio_iterativo(20,3);
-		elapsed = System.nanoTime() - start;
-		System.out.printf("Result: %d; Elapsed: %d ns\n", result, elapsed);
+		sum = 0;
+		for(int i = 0; i < ITERATIONS; i++) {
+			start = System.nanoTime();
+			result = combinatorio_iterativo(20,3);
+			sum += System.nanoTime() - start;
+		}
+		elapsed_mean = sum/ITERATIONS;
+		System.out.printf("Result: %d; Elapsed: %d ns\n", result, elapsed_mean);
 		
+		
+		/*
+		 * RECURSIVO
+		 */
 		System.out.println("[ RECURSIVO ]");
-		start = System.nanoTime();
-		result = combinatorio_recursivo(20,3);
-		elapsed = System.nanoTime() - start;
-		System.out.printf("Result: %d; Elapsed: %d ns\n", result, elapsed);
+		sum = 0;
+		for(int i = 0; i < ITERATIONS; i++) {
+			start = System.nanoTime();
+			result = combinatorio_recursivo(20,3);
+			sum += System.nanoTime() - start;
+		}
+		elapsed_mean = sum/ITERATIONS;
+		System.out.printf("Result: %d; Elapsed: %d ns\n", result, elapsed_mean);
 		
+		
+		/*
+		 * RECURSIVO CON PILAS
+		 */
 		System.out.println("[ RECURSIVO PILAS ]");
-		start = System.nanoTime();
-		result = combinatorio_recursivo_pilas(20,3);
-		elapsed = System.nanoTime() - start;
-		System.out.printf("Result: %d; Elapsed: %d ns\n", result, elapsed);
-		
+		sum = 0;
+		for(int i = 0; i < ITERATIONS; i++) {
+			start = System.nanoTime();
+			result = combinatorio_recursivo_pilas(20,3);
+			sum += System.nanoTime() - start;
+		}
+		elapsed_mean = sum/ITERATIONS;
+		System.out.printf("Result: %d; Elapsed: %d ns\n", result, elapsed_mean);		
 	}
 
 }
