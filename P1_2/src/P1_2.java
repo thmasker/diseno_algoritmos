@@ -5,21 +5,18 @@ public class P1_2 {
 	public static final int N = 20;
 	public static final int K = N/2;
 	
-	static long combinatorio_iterativo(int n, int k) {
-		
+	private static long factorial(int n) {
 		long n_factorial = 1;
-		for(int i = n; i > 1; i--)
+		
+		for(int i = n; i > 1; i--) {
 			n_factorial *= i;
+		}
 		
-		long k_factorial = 1;
-		for(int i = k; i > 1; i--)
-			k_factorial *= i;
-		
-		long n_k_factorial = 1;
-		for(int i = n-k; i > 1; i--)
-			n_k_factorial *= i;
-		
-		return n_factorial/(k_factorial * n_k_factorial);
+		return n_factorial;
+	}
+	
+	static long combinatorio_iterativo(int n, int k) {
+		return factorial(n)/(factorial(k) * factorial(n-k));
 	}
 	
 	static long combinatorio_recursivo(int n, int k) {
