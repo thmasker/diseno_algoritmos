@@ -5,7 +5,7 @@ public class P3 {
 	static int CAMBIO = 13;
 	
 	private static class Moneda {
-		int tipo;	// Índice en MONEDAS del valor de esta moneda
+		int tipo;	// Ã�ndice en MONEDAS del valor de esta moneda
 		int cantidad;
 		int cambioRestante;
 		Moneda vengo;
@@ -94,7 +94,7 @@ public class P3 {
 						nueva.setVengo(actual);
 						if(!monedas.contains(nueva)) {
 							monedas.add(nueva);
-							System.out.println("\tAñadiendo: " + nueva.toString());
+							System.out.println("\tAÃ±adiendo: " + nueva.toString());
 						} else {
 							Moneda existente = monedas.get(monedas.indexOf(nueva));
 							if(existente.cantidad() * MONEDAS[existente.tipo()] < nueva.cantidad() * MONEDAS[nueva.tipo()]) {
