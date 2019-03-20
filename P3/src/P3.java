@@ -15,37 +15,40 @@ public class P3 {
 		public int tipo() {
 			return tipo;
 		}
-		public void setTipo(int tipo) {
-			this.tipo = tipo;
-		}
+		
 		public int cantidad() {
 			return cantidad;
 		}
+		
 		public void setCantidad(int cantidad) {
 			this.cantidad = cantidad;
 		}
+		
 		public int monedasTotales() {
 			return monedasTotales;
 		}
+		
 		public void setMonedasTotales(int monedasTotales) {
 			this.monedasTotales = monedasTotales;
 		}
+		
 		public int cambio() {
 			return cambioRestante;
 		}
-		public void setCambioRestante(int cambioRestante) {
-			this.cambioRestante = cambioRestante;
-		}
+		
 		public Moneda vengo() {
 			return vengo;
 		}
+		
 		public void setVengo(Moneda vengo) {
 			this.vengo = vengo;
 		}
-		public Moneda(int tipo, int cantidad, int cambioRestante) {
+		
+		public Moneda(int tipo, int cantidad, int cambioRestante, int monedasTotales) {
 			this.tipo = tipo;
 			this.cantidad = cantidad;
 			this.cambioRestante = cambioRestante;
+			this.monedasTotales = monedasTotales;
 		}
 		
 		public boolean equals(Object m) {
@@ -53,9 +56,13 @@ public class P3 {
 					tipo() == ((Moneda)m).tipo() &&
 					cambio() == ((Moneda)m).cambio();
 		}
+		
 		@Override
 		public String toString() {
-			return "Moneda [tipo=" + tipo + ", cantidad=" + cantidad + ", monedasTotales=" + monedasTotales + ", cambioRestante=" + cambioRestante + "]";
+			return "Moneda [tipo=" + tipo 
+					+ ", cantidad=" + cantidad 
+					+ ", monedasTotales=" + monedasTotales 
+					+ ", cambioRestante=" + cambioRestante + "]";
 		}
 		
 		
@@ -68,65 +75,71 @@ public class P3 {
 	
 	private static Moneda best(ArrayList<Moneda> monedas) {
 		Moneda best = monedas.get(1);
+		
 		for(int i = 2; i < monedas.size(); i++) {
-			if(monedas.get(i).cambio() < best.cambio() || (monedas.get(i).cambio() == best.cambio() && monedas.get(i).cantidad() < best.cantidad()))
+			if(monedas.get(i).cambio() < best.cambio() || (monedas.get(i).cambio() == best.cambio() && monedas.get(i).monedasTotales() < best.monedasTotales()))
 				best = monedas.get(i);
 		}
+		
 		return best;
 	}
 	
 	private static int[] solution(Moneda best) {
-		
 		Moneda last = best;
+		
 		while(last.vengo() != null) {
 			System.out.printf("Moneda: %d, cantidad: %d\n", MONEDAS[last.tipo()], last.cantidad());
 			last = last.vengo();
 		}
+		
 		return new int[0];
 	}
 	
 	private static ArrayList<Moneda> _forward() {
 		ArrayList<Moneda> monedas = new ArrayList<Moneda>();
-		monedas.add(new Moneda(-1,0,CAMBIO));
+		monedas.add(new Moneda(-1,0,CAMBIO,0));
 		int pos = 0;
 		int tipo_moneda = -1;
+		
 		while(pos < monedas.size()) {
 			Moneda actual = monedas.get(pos);
 			tipo_moneda = actual.tipo()+1;
+			
 			if(tipo_moneda < MONEDAS.length) {
 				System.out.println("Moneda actual: " + actual.toString());
+				
 				for(int cant = 0; cant <= actual.cambio() / MONEDAS[tipo_moneda]; cant++) {
+					
 					int nuevo_cambio = actual.cambio() - cant * MONEDAS[tipo_moneda];
-					//if((CAMBIO - nuevo_cambio) >= MONEDAS[MONEDAS.length-1]) {
-						//System.out.println(x);
-						Moneda nueva = new Moneda(tipo_moneda, cant, nuevo_cambio);
-						nueva.setVengo(actual);
+					int nuevo_monedasTotales = actual.monedasTotales() + cant;
+					
+					Moneda nueva = new Moneda(tipo_moneda, cant, nuevo_cambio, nuevo_monedasTotales);
+					nueva.setVengo(actual);
+						
 						if(!monedas.contains(nueva)) {
 							monedas.add(nueva);
 							System.out.println("\tAÃ±adiendo: " + nueva.toString());
 						} else {
 							Moneda existente = monedas.get(monedas.indexOf(nueva));
-							if(nueva.cambio() <= existente.cambio() && nueva.monedasTotales() < existente.monedasTotales()) {
-								existente.setCantidad(nueva.cantidad());
-								existente.setVengo(nueva.vengo());
+							
+							if(nueva.monedasTotales() < existente.monedasTotales()) {
 								System.out.println("\tCambiando: " + existente.toString());
 								System.out.println("\t\tPor: " + nueva.toString());
+								existente.setCantidad(nueva.cantidad());
+								existente.setVengo(nueva.vengo());
+								existente.setMonedasTotales(nueva.monedasTotales());
 							}
-						}
-					//}
-					
+						}	
 				}
 			}
+			
 			pos++;
 		}
 		
 		return monedas;
 	}
-	
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		forward();
 	}
-
 }
