@@ -5,10 +5,12 @@ public class P3 {
 	static int CAMBIO = 13;
 	
 	private static class Moneda {
-		int tipo;	// Ã�ndice en MONEDAS del valor de esta moneda
-		int cantidad;
-		int cambioRestante;
-		Moneda vengo;
+		int tipo;		// Índice en MONEDAS del valor de esta moneda
+		int cantidad;	// Cantidad de monedas de este tipo
+		int monedasTotales;	// Cantidad total de monedas totales que se devolverían
+		int cambioRestante;	// Cambio restante que faltaría por devolver
+		Moneda vengo;		// Moneda de la que vengo o a la que voy
+		
 		
 		public int tipo() {
 			return tipo;
@@ -21,6 +23,12 @@ public class P3 {
 		}
 		public void setCantidad(int cantidad) {
 			this.cantidad = cantidad;
+		}
+		public int monedasTotales() {
+			return monedasTotales;
+		}
+		public void setMonedasTotales(int monedasTotales) {
+			this.monedasTotales = monedasTotales;
 		}
 		public int cambio() {
 			return cambioRestante;
@@ -47,7 +55,7 @@ public class P3 {
 		}
 		@Override
 		public String toString() {
-			return "Moneda [tipo=" + tipo + ", cantidad=" + cantidad + ", cambioRestante=" + cambioRestante + "]";
+			return "Moneda [tipo=" + tipo + ", cantidad=" + cantidad + ", monedasTotales=" + monedasTotales + ", cambioRestante=" + cambioRestante + "]";
 		}
 		
 		
@@ -89,7 +97,8 @@ public class P3 {
 				System.out.println("Moneda actual: " + actual.toString());
 				for(int cant = 0; cant <= actual.cambio() / MONEDAS[tipo_moneda]; cant++) {
 					int nuevo_cambio = actual.cambio() - cant * MONEDAS[tipo_moneda];
-					if((CAMBIO - nuevo_cambio) > MONEDAS[MONEDAS.length-1]) {
+					//if((CAMBIO - nuevo_cambio) >= MONEDAS[MONEDAS.length-1]) {
+						//System.out.println(x);
 						Moneda nueva = new Moneda(tipo_moneda, cant, nuevo_cambio);
 						nueva.setVengo(actual);
 						if(!monedas.contains(nueva)) {
@@ -97,14 +106,14 @@ public class P3 {
 							System.out.println("\tAÃ±adiendo: " + nueva.toString());
 						} else {
 							Moneda existente = monedas.get(monedas.indexOf(nueva));
-							if(existente.cantidad() * MONEDAS[existente.tipo()] < nueva.cantidad() * MONEDAS[nueva.tipo()]) {
+							if(nueva.cambio() <= existente.cambio() && nueva.monedasTotales() < existente.monedasTotales()) {
 								existente.setCantidad(nueva.cantidad());
 								existente.setVengo(nueva.vengo());
 								System.out.println("\tCambiando: " + existente.toString());
 								System.out.println("\t\tPor: " + nueva.toString());
 							}
 						}
-					}
+					//}
 					
 				}
 			}
