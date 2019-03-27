@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class P3 {
-	static int[] MONEDAS = new int[] {5,2,1};
+	static int[] MONEDAS = new int[] {5, 2, 1};
 	static int CAMBIO = 13;
 	
 	private static class Moneda {
@@ -10,7 +10,6 @@ public class P3 {
 		int monedasTotales;	// Cantidad total de monedas totales que se devolverían
 		int cambioRestante;	// Cambio restante que faltaría por devolver
 		Moneda vengo;		// Moneda de la que vengo o a la que voy
-		
 		
 		public int tipo() {
 			return tipo;
@@ -136,8 +135,54 @@ public class P3 {
 		
 		return monedas;
 	}
+	
+	private static void forwardMatrix() {
+		int [][] F = new int[CAMBIO+1][MONEDAS.length+1];
+		int [][] caminoF = new int[CAMBIO+1][MONEDAS.length+1];
+		
+		_forwardMatrix(F, caminoF);
+		
+		for(int i = 0; i < F.length; i++) {
+			for(int j = 0; j < F[0].length; j++) {
+				System.out.printf("\t%d", F[i][j]);
+			}
+			
+			System.out.println();
+		}
+		
+		System.out.println(rutaF(0, caminoF));
+	}
+	
+	private static String rutaF(int fila, int [][] caminoF) {
+		String ruta = "";
+		
+		for(int col = caminoF[0].length-1; col > 0; col--) {
+			int cantidad = caminoF[fila][col];
+			ruta = "Monedas de " + MONEDAS[col-1] + ": " + cantidad + "\n" + ruta;
+			fila += cantidad * MONEDAS[col-1];
+		}
+		
+		return ruta;
+	}
+	
+	private static void _forwardMatrix(int [][] F, int [][] caminoF) {
+		int cambios = F.length;
+		int tipos = F[0].length - 1;
+		
+		for(int t = 0; t < tipos; t++) {
+			for(int c = cambios - 1; c > 0; c--) {
+				for(int cant = 0; cant <= c / MONEDAS[t]; cant++) {
+					if((F[c-MONEDAS[t]*cant][t+1] == 0) || (F[c-MONEDAS[t]*cant][t+1] > F[c][t] + cant)) {
+						F[c-MONEDAS[t]*cant][t+1] = F[c][t] + cant;
+						caminoF[c-MONEDAS[t]*cant][t+1] = cant;
+					}
+				}
+			}
+		}
+	}
 
 	public static void main(String[] args) {
-		forward();
+		//forward();
+		forwardMatrix();
 	}
 }
