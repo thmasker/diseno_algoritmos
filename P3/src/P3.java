@@ -64,8 +64,6 @@ public class P3 {
 					+ ", monedasTotales=" + monedasTotales 
 					+ ", cambioRestante=" + cambioRestante + "]";
 		}
-		
-		
 	}
 	
 	private static int[] forward() {
@@ -116,20 +114,20 @@ public class P3 {
 					Moneda nueva = new Moneda(tipo_moneda, cant, nuevo_cambio, nuevo_monedasTotales);
 					nueva.setVengo(actual);
 						
-						if(!monedas.contains(nueva)) {
-							monedas.add(nueva);
-							System.out.println("\tAÃ±adiendo: " + nueva.toString());
-						} else {
-							Moneda existente = monedas.get(monedas.indexOf(nueva));
-							
-							if(nueva.monedasTotales() < existente.monedasTotales()) {
-								System.out.println("\tCambiando: " + existente.toString());
-								System.out.println("\t\tPor: " + nueva.toString());
-								existente.setCantidad(nueva.cantidad());
-								existente.setVengo(nueva.vengo());
-								existente.setMonedasTotales(nueva.monedasTotales());
-							}
-						}	
+					if(!monedas.contains(nueva)) {
+						monedas.add(nueva);
+						System.out.println("\tAÃ±adiendo: " + nueva.toString());
+					} else {
+						Moneda existente = monedas.get(monedas.indexOf(nueva));
+						
+						if(nueva.monedasTotales() < existente.monedasTotales()) {
+							System.out.println("\tCambiando: " + existente.toString());
+							System.out.println("\t\tPor: " + nueva.toString());
+							existente.setCantidad(nueva.cantidad());
+							existente.setVengo(nueva.vengo());
+							existente.setMonedasTotales(nueva.monedasTotales());
+						}
+					}	
 				}
 			}
 			
