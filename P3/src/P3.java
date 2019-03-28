@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class P3 {
 	static int[] MONEDAS = new int[] {5, 2, 1};
-	static int CAMBIO = 4;
+	static int CAMBIO = 13;
 	
 	private static class Moneda {
 		int tipo;		// Índice en MONEDAS del valor de esta moneda
@@ -138,6 +138,7 @@ public class P3 {
 	
 	private static void forwardMatrix() {
 		int [][] F = new int[CAMBIO+1][MONEDAS.length+1];
+		for(int f=0;f<F.length;f++) for(int c=0;c<F[0].length;c++) F[f][c]=-1;
 		int [][] caminoF = new int[CAMBIO+1][MONEDAS.length+1];
 		
 		_forwardMatrix(F, caminoF);
@@ -180,12 +181,18 @@ public class P3 {
 		int cambios = F.length - 1;
 		int tipos = F[0].length - 1;
 		
-		for(int c = cambios; c >= 0; c--) {
-			for(int t = 0; t < tipos; t++) {
-				for(int cant = 0; cant <= c / MONEDAS[t]; cant++) {
-					if((F[c-MONEDAS[t]*cant][t+1] == 0) || (F[c-MONEDAS[t]*cant][t+1] < F[c][t] + cant)) {
-						F[c-MONEDAS[t]*cant][t+1] = F[c][t] + cant;
-						caminoF[c-MONEDAS[t]*cant][t+1] = cant;
+		F[F.length-1][0]=0;
+		for(int t = 0; t < tipos; t++) {
+			for(int c = 0; c <= cambios; c++) {
+				if(F[c][t] >= 0) {
+					for(int cant = 0; cant <= c / MONEDAS[t]; cant++) {
+						if(c-MONEDAS[t]*cant >=0) {
+							if(F[c-MONEDAS[t]*cant][t+1] < F[c][t] + MONEDAS[t]*cant) {
+						
+								F[c-MONEDAS[t]*cant][t+1] = F[c][t] + MONEDAS[t]*cant;
+								caminoF[c-MONEDAS[t]*cant][t+1] = cant;
+							}
+						}
 					}
 				}
 			}
