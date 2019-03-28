@@ -138,7 +138,7 @@ public class P3 {
 	
 	private static void forwardMatrix() {
 		int [][] F = new int[CAMBIO+1][MONEDAS.length+1];
-		for(int f=0;f<F.length;f++) for(int c=0;c<F[0].length;c++) F[f][c]=-1;
+		for(int f = 0; f < F.length; f++) for(int c = 0; c < F[0].length; c++) F[f][c] = -1;
 		int [][] caminoF = new int[CAMBIO+1][MONEDAS.length+1];
 		
 		_forwardMatrix(F, caminoF);
@@ -162,13 +162,20 @@ public class P3 {
 			System.out.println();
 		}
 		
-		System.out.println(rutaF(0, caminoF));
+		System.out.println(rutaF(F, caminoF));
 	}
 	
-	private static String rutaF(int fila, int [][] caminoF) {
+	private static String rutaF(int [][] F, int [][] caminoF) {
 		String ruta = "";
+		int fila = 0;
 		
-		for(int col = caminoF[0].length-1; col > 0; col--) {
+		for(int f = 0; f < F.length; f++) {
+			if(F[f][F[0].length-1] > F[fila][F[0].length-1]) {
+				fila = f;
+			}
+		}
+		
+		for(int col = F[0].length-1; col > 0; col--) {
 			int cantidad = caminoF[fila][col];
 			ruta = "Monedas de " + MONEDAS[col-1] + ": " + cantidad + "\n" + ruta;
 			fila += cantidad * MONEDAS[col-1];
@@ -186,12 +193,9 @@ public class P3 {
 			for(int c = 0; c <= cambios; c++) {
 				if(F[c][t] >= 0) {
 					for(int cant = 0; cant <= c / MONEDAS[t]; cant++) {
-						if(c-MONEDAS[t]*cant >=0) {
-							if(F[c-MONEDAS[t]*cant][t+1] < F[c][t] + MONEDAS[t]*cant) {
-						
-								F[c-MONEDAS[t]*cant][t+1] = F[c][t] + MONEDAS[t]*cant;
-								caminoF[c-MONEDAS[t]*cant][t+1] = cant;
-							}
+						if((F[c-MONEDAS[t]*cant][t+1] == -1) || (F[c-MONEDAS[t]*cant][t+1] > F[c][t] + cant)) {
+							F[c-MONEDAS[t]*cant][t+1] = F[c][t] + cant;
+							caminoF[c-MONEDAS[t]*cant][t+1] = cant;
 						}
 					}
 				}
