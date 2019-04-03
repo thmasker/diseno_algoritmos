@@ -141,52 +141,50 @@ public class P3 {
 	
 	private static void solutionBackward(Moneda first) {
 		while(first.vengo() != null) {
-			System.out.printf("Moneda: %d, cantidad: %d\n", MONEDAS[first.tipo()], first.cantidad());
-			first = first.vengo();
+			if(first.tipo() != -1) {
+				System.out.printf("Moneda: %d, cantidad: %d\n", MONEDAS[first.tipo()], first.cantidad());
+			}
+			
+			first = first.vengo();	
 		}
+		
+		System.out.printf("Moneda: %d, cantidad: %d\n", MONEDAS[first.tipo()], first.cantidad());
 	}
 	
 	private static Moneda _backward(Moneda actual, ArrayList<Moneda> calculadas){
-//		Moneda existente = null;
-//		int tipo_moneda = -1;
-//		
+		Moneda nueva;
+		
 //		if(calculadas.contains(actual)) {
-//			existente = calculadas.get(calculadas.indexOf(actual));
+//			nueva = calculadas.get(calculadas.indexOf(actual));
 //		} else {
-//			tipo_moneda = actual.tipo() + 1;
-//			
-//			if(tipo_moneda < MONEDAS.length) {
-//				System.out.println("Moneda actual: " + actual.toString());
-//				
-//				for(int cant = 0; cant <= actual.cambio() / MONEDAS[tipo_moneda]; cant++) {
-//					
-//					int nuevo_cambio = actual.cambio() - cant * MONEDAS[tipo_moneda];
-//					int nuevo_monedasTotales = actual.monedasTotales() + cant;
-//					
-//					Moneda nueva = new Moneda(tipo_moneda, cant, nuevo_cambio, nuevo_monedasTotales);
-//					
-//					existente = _backward(nueva, calculadas);
-//					
-//					if(existente.monedasTotales() < actual.monedasTotales()) {
-//						System.out.println("\tCambiando: " + actual.toString());
-//						System.out.println("\t\tPor: " + existente.toString());
-//						existente.setCantidad(existente.cantidad());
-//						existente.setVengo(existente.vengo());
-//						existente.setMonedasTotales(existente.monedasTotales());
-//					}
-//					
-//					if(monedas.get(i).cambio() < best.cambio() || (monedas.get(i).cambio() == best.cambio() && monedas.get(i).monedasTotales() < best.monedasTotales())) {
-//						
-//					}
-//				}
-//			}
-//			
-//			existente = actual;
-//			calculadas.add(actual);
+			int tipo_moneda = actual.tipo() + 1;
+			
+			if(tipo_moneda < MONEDAS.length) {
+				System.out.println("Moneda actual: " + actual.toString());
+				
+				for(int cant = 0; cant <= actual.cambio() / MONEDAS[tipo_moneda]; cant++) {
+					int nuevo_cambio = actual.cambio() - MONEDAS[tipo_moneda] * cant;
+					int nuevo_monedasTotales = actual.monedasTotales() + cant;
+					
+					nueva = _backward(new Moneda(tipo_moneda, cant, nuevo_cambio, nuevo_monedasTotales), calculadas);
+					
+					if(actual.vengo() == null) {
+						actual.setVengo(nueva);
+					} else if(nueva.cambio() < actual.vengo().cambio() || 
+							nueva.cambio() == actual.vengo().cambio() && nueva.monedasTotales() < actual.vengo().monedasTotales()) {
+						System.out.println("\tCambiando: " + actual.toString()); //actual.vengo().toString();
+						System.out.println("\t\tPor: " + nueva.toString());
+						actual.setVengo(nueva);
+					}
+				}
+			}
+			
+			nueva = actual;
+			System.out.println("\tAñadiendo: " + actual.toString());
+			calculadas.add(actual);
 //		}
-//		
-//		return existente;
-		return null;
+		
+		return nueva;
 	}
 	
 	private static void forwardMatrix() {
@@ -300,8 +298,8 @@ public class P3 {
 
 	public static void main(String[] args) {
 		//forward();
-		//backward();
+		backward();
 		//forwardMatrix();
-		backwardMatrix();
+		//backwardMatrix();
 	}
 }
