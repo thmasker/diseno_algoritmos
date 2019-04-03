@@ -186,6 +186,7 @@ public class P3 {
 //		}
 //		
 //		return existente;
+		return null;
 	}
 	
 	private static void forwardMatrix() {
@@ -254,10 +255,53 @@ public class P3 {
 			}
 		}
 	}
+	
+	private static void backwardMatrix() {
+		int [][] B = new int[CAMBIO+1][MONEDAS.length+1];
+		int [][] caminoB = new int[CAMBIO+1][MONEDAS.length+1];
+		
+		_backwardMatrix(B, caminoB, CAMBIO, 0);
+		
+		System.out.println(rutaB(caminoB));
+	}
+	
+	private static String rutaB(int[][] ruta) {
+		String sol = "";
+		int fila = CAMBIO;
+		for(int m=0; m < MONEDAS.length; m++) {
+			sol += "Monedas de " + MONEDAS[m] + ": " + ruta[fila][m] + "\n";
+			fila = fila - ruta[fila][m] * MONEDAS[m];
+		}
+		return sol;
+	}
+	
+	private static void _backwardMatrix(int[][] B, int[][] caminoB, int cambioRestante, int monedaIndex) {
+		// Solo si no estamos en la última columna y el valor no ha sido calculado previamente
+		if(monedaIndex < B[0].length - 1 && B[cambioRestante][monedaIndex] == 0) {
+			int n_monedaIndex = monedaIndex + 1;
+			// Sucesores: Cantidad de monedas que podemos devolver de este tipo
+			for(int cant = 0; cant <= cambioRestante / MONEDAS[monedaIndex]; cant++) {
+				// Calculamos el nuevo cambio restante con esta cantidad de monedas de este tipo
+				int n_cambioRestante = cambioRestante - cant * MONEDAS[monedaIndex];
+				// Solo si el nuevo cambio no es negativo
+				// Esta comparación no debería hacer falta porque ya se tiene en cuenta en los valores del cant definidos en el for
+				if(n_cambioRestante >= 0) {
+					// Calculamos la nueva celda (si no estaba calculada ya)
+					_backwardMatrix(B, caminoB, n_cambioRestante, n_monedaIndex);
+					// Cambio la celda actual si no estaba calculada o si la mejoram
+					if(B[cambioRestante][monedaIndex] == 0 || B[n_cambioRestante][n_monedaIndex] == 0 ||  B[n_cambioRestante][n_monedaIndex] + cant < B[cambioRestante][monedaIndex]) {
+						B[cambioRestante][monedaIndex] = B[n_cambioRestante][n_monedaIndex] + cant;
+						caminoB[cambioRestante][monedaIndex] = cant;
+					}
+				}
+			}
+		}
+	}
 
 	public static void main(String[] args) {
 		//forward();
-		backward();
+		//backward();
 		//forwardMatrix();
+		backwardMatrix();
 	}
 }
