@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class P3 {
-	static int[] MONEDAS = new int[] {5, 2, 1};
-	static int CAMBIO = 13;
+	static Integer [] MONEDAS;
+	static int CAMBIO;
 	
 	private static class Moneda {
 		int tipo;		// Índice en MONEDAS del valor de esta moneda
@@ -101,7 +103,7 @@ public class P3 {
 			tipo_moneda = actual.tipo()+1;
 			
 			if(tipo_moneda < MONEDAS.length) {
-				System.out.println("Moneda actual: " + actual.toString());
+//				System.out.println("Moneda actual: " + actual.toString());
 				
 				for(int cant = 0; cant <= actual.cambio() / MONEDAS[tipo_moneda]; cant++) {
 					
@@ -113,13 +115,13 @@ public class P3 {
 						
 					if(!monedas.contains(nueva)) {
 						monedas.add(nueva);
-						System.out.println("\tAÃ±adiendo: " + nueva.toString());
+//						System.out.println("\tAÃ±adiendo: " + nueva.toString());
 					} else {
 						Moneda existente = monedas.get(monedas.indexOf(nueva));
 						
 						if(nueva.monedasTotales() < existente.monedasTotales()) {
-							System.out.println("\tCambiando: " + existente.toString());
-							System.out.println("\t\tPor: " + nueva.toString());
+//							System.out.println("\tCambiando: " + existente.toString());
+//							System.out.println("\t\tPor: " + nueva.toString());
 							existente.setCantidad(nueva.cantidad());
 							existente.setVengo(nueva.vengo());
 							existente.setMonedasTotales(nueva.monedasTotales());
@@ -161,7 +163,7 @@ public class P3 {
 			int tipo_moneda = actual.tipo() + 1;
 			
 			if(tipo_moneda < MONEDAS.length) {
-				System.out.println("Moneda actual: " + actual.toString());
+//				System.out.println("Moneda actual: " + actual.toString());
 				
 				for(int cant = 0; cant <= actual.cambio() / MONEDAS[tipo_moneda]; cant++) {
 					int nuevo_cambio = actual.cambio() - MONEDAS[tipo_moneda] * cant;
@@ -173,15 +175,15 @@ public class P3 {
 						actual.setVengo(nueva);
 					} else if(nueva.cambio() < actual.vengo().cambio() || 
 							nueva.cambio() == actual.vengo().cambio() && nueva.monedasTotales() < actual.vengo().monedasTotales()) {
-						System.out.println("\tCambiando: " + actual.vengo().toString());
-						System.out.println("\t\tPor: " + nueva.toString());
+//						System.out.println("\tCambiando: " + actual.vengo().toString());
+//						System.out.println("\t\tPor: " + nueva.toString());
 						actual.setVengo(nueva);
 					}
 				}
 			}
 			
 			nueva = actual;
-			System.out.println("\tAñadiendo: " + actual.toString());
+//			System.out.println("\tAñadiendo: " + actual.toString());
 			calculadas.add(actual);
 		}
 		
@@ -195,24 +197,24 @@ public class P3 {
 		
 		_forwardMatrix(F, caminoF);
 		
-		for(int i = 0; i < F.length; i++) {
-			for(int j = 0; j < F[0].length; j++) {
-				System.out.printf("\t%d", F[i][j]);
-			}
-			
-			System.out.println();
-		}
-		
-		System.out.println();
-		System.out.println();
-		
-		for(int i = 0; i < caminoF.length; i++) {
-			for(int j = 0; j < caminoF[0].length; j++) {
-				System.out.printf("\t%d", caminoF[i][j]);
-			}
-			
-			System.out.println();
-		}
+//		for(int i = 0; i < F.length; i++) {
+//			for(int j = 0; j < F[0].length; j++) {
+//				System.out.printf("\t%d", F[i][j]);
+//			}
+//			
+//			System.out.println();
+//		}
+//		
+//		System.out.println();
+//		System.out.println();
+//		
+//		for(int i = 0; i < caminoF.length; i++) {
+//			for(int j = 0; j < caminoF[0].length; j++) {
+//				System.out.printf("\t%d", caminoF[i][j]);
+//			}
+//			
+//			System.out.println();
+//		}
 		
 		System.out.println(rutaF(F, caminoF));
 	}
@@ -296,11 +298,77 @@ public class P3 {
 			}
 		}
 	}
-
+	
+	private static void menuCambio() {
+		Leer leer = new Leer();
+		
+		System.out.println("Inserte el cambio a devolver: ");
+		CAMBIO = leer.pedirIntPositivo();
+		System.out.println("\nCambio a devolver: " + CAMBIO);
+	}
+	
+	private static void menuMonedas() {
+		Leer leer = new Leer();
+		
+		System.out.println("\nInserte el número de monedas disponibles: ");
+		MONEDAS = new Integer[leer.pedirIntPositivo()];
+		
+		System.out.println();
+		
+		for(int i = 0; i < MONEDAS.length; i++) {
+			System.out.println("Inserte el valor de la moneda " + (i+1) + ":");
+			MONEDAS[i] = leer.pedirIntPositivo();
+		}
+		
+		Arrays.sort(MONEDAS, Collections.reverseOrder());
+	}
+	
+	private static void menuAlgoritmo() {
+		Leer leer = new Leer();
+		
+		do {
+			System.out.println("\nAlgoritmos disponibles\n");
+			System.out.println("1. Forward");
+			System.out.println("2. Backward");
+			System.out.println("3. Forward Matricial");
+			System.out.println("4. Backward Matricial\n");
+			
+			switch(leer.pedirIntRango(1, 4)) {
+			case 1:
+				System.out.println();
+				forward();
+				break;
+			case 2:
+				System.out.println();
+				backward();
+				break;
+			case 3:
+				System.out.println();
+				forwardMatrix();
+				break;
+			case 4:
+				System.out.println();
+				backwardMatrix();
+				break;
+			}
+			
+			System.out.println("\n¿Desea probar otros algoritmos? (y/n)");
+		} while(leer.pedirChar() == 'y');
+	}
+	
 	public static void main(String[] args) {
-		//forward();
-		backward();
-		//forwardMatrix();
-		//backwardMatrix();
+		Leer leer = new Leer();
+		
+		System.out.println("-------------	CAMBIOS S.A. (¡encuentra el mejor cambio posible!)	-------------\n");
+		do {
+			menuCambio();
+			menuMonedas();
+			menuAlgoritmo();
+			
+			System.out.println("\n¿Desea calcular más cambios? (y/n)");
+		} while(leer.pedirChar() == 'y');
+		
+		System.out.println("\nHecho por Alberto Velasco Mata y Diego Pedregal Hidalgo, 2019 (C)");
+		System.out.println("Sin derechos reservados :(");
 	}
 }
