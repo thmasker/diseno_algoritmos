@@ -145,7 +145,7 @@ public class P3 {
 				System.out.printf("Moneda: %d, cantidad: %d\n", MONEDAS[first.tipo()], first.cantidad());
 			}
 			
-			first = first.vengo();	
+			first = first.vengo();
 		}
 		
 		System.out.printf("Moneda: %d, cantidad: %d\n", MONEDAS[first.tipo()], first.cantidad());
@@ -154,9 +154,10 @@ public class P3 {
 	private static Moneda _backward(Moneda actual, ArrayList<Moneda> calculadas){
 		Moneda nueva;
 		
-//		if(calculadas.contains(actual)) {
-//			nueva = calculadas.get(calculadas.indexOf(actual));
-//		} else {
+		if(calculadas.contains(actual) && 
+				calculadas.get(calculadas.indexOf(actual)).monedasTotales() <= actual.monedasTotales()) {
+			nueva = calculadas.get(calculadas.indexOf(actual));
+		} else {
 			int tipo_moneda = actual.tipo() + 1;
 			
 			if(tipo_moneda < MONEDAS.length) {
@@ -172,7 +173,7 @@ public class P3 {
 						actual.setVengo(nueva);
 					} else if(nueva.cambio() < actual.vengo().cambio() || 
 							nueva.cambio() == actual.vengo().cambio() && nueva.monedasTotales() < actual.vengo().monedasTotales()) {
-						System.out.println("\tCambiando: " + actual.toString()); //actual.vengo().toString();
+						System.out.println("\tCambiando: " + actual.vengo().toString());
 						System.out.println("\t\tPor: " + nueva.toString());
 						actual.setVengo(nueva);
 					}
@@ -182,7 +183,7 @@ public class P3 {
 			nueva = actual;
 			System.out.println("\tAñadiendo: " + actual.toString());
 			calculadas.add(actual);
-//		}
+		}
 		
 		return nueva;
 	}
