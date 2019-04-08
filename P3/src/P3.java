@@ -179,20 +179,17 @@ public class P3 {
 			if(tipo_moneda < MONEDAS.length) {
 //				System.out.println("Moneda actual: " + actual.toString());
 				
-				for(int cant = 0; cant <= CAMBIO / MONEDAS[tipo_moneda]; cant++) {
+				for(int cant = 0; cant <= CAMBIO - actual.cambio() / MONEDAS[tipo_moneda]; cant++) {
 					nueva = _backward(new Moneda(tipo_moneda, cant, 0, 0), calculadas);
 					
-					if(actual.vengo() == null) {
-						actual.setVengo(nueva);
-					} else if(nueva.cambio() < actual.vengo().cambio() || 
+					if(actual.vengo() == null || nueva.cambio() > actual.vengo().cambio() || 
 							nueva.cambio() == actual.vengo().cambio() && nueva.monedasTotales() < actual.vengo().monedasTotales()) {
 //						System.out.println("\tCambiando: " + actual.vengo().toString());
 //						System.out.println("\t\tPor: " + nueva.toString());
 						actual.setVengo(nueva);
+						actual.setCambio(actual.valorMoneda() * actual.cantidad() + nueva.cambio());
+						actual.setMonedasTotales(actual.cantidad() + nueva.monedasTotales());
 					}
-					
-					actual.setCambio(actual.valorMoneda() * actual.cantidad() + nueva.cambio());
-					actual.setMonedasTotales(actual.cantidad() + nueva.monedasTotales());
 				}
 			}
 			
