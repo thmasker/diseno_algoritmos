@@ -17,6 +17,12 @@ public class P3 {
 			return tipo;
 		}
 		
+		public int valorMoneda() {
+			if(this.tipo < 0)
+				return 0;
+			return MONEDAS[this.tipo];
+		}
+		
 		public int cantidad() {
 			return cantidad;
 		}
@@ -35,6 +41,10 @@ public class P3 {
 		
 		public int cambio() {
 			return cambioRestante;
+		}
+		
+		public void setCambio(int cambio) {
+			this.cambioRestante = cambio;
 		}
 		
 		public Moneda vengo() {
@@ -137,7 +147,7 @@ public class P3 {
 	}
 	
 	private static void backward() {
-		Moneda first = _backward(new Moneda(-1, 0, CAMBIO, 0), new ArrayList<Moneda>());
+		Moneda first = _backward(new Moneda(-1, 0, 0, 0), new ArrayList<Moneda>());
 		solutionBackward(first);
 	}
 	
@@ -153,11 +163,15 @@ public class P3 {
 		System.out.printf("Moneda: %d, cantidad: %d\n", MONEDAS[first.tipo()], first.cantidad());
 	}
 	
+	
+	// cambioRestante --> cambioDevuelto y vengo --> voy
 	private static Moneda _backward(Moneda actual, ArrayList<Moneda> calculadas){
 		Moneda nueva;
 		
-		if(calculadas.contains(actual) && 
-				calculadas.get(calculadas.indexOf(actual)).monedasTotales() <= actual.monedasTotales()) {
+		actual.setCambio(actual.valorMoneda() * actual.cantidad());
+		actual.setMonedasTotales(actual.cantidad());
+		
+		if(calculadas.contains(actual)) {
 			nueva = calculadas.get(calculadas.indexOf(actual));
 		} else {
 			int tipo_moneda = actual.tipo() + 1;
@@ -165,11 +179,8 @@ public class P3 {
 			if(tipo_moneda < MONEDAS.length) {
 //				System.out.println("Moneda actual: " + actual.toString());
 				
-				for(int cant = 0; cant <= actual.cambio() / MONEDAS[tipo_moneda]; cant++) {
-					int nuevo_cambio = actual.cambio() - MONEDAS[tipo_moneda] * cant;
-					int nuevo_monedasTotales = actual.monedasTotales() + cant;
-					
-					nueva = _backward(new Moneda(tipo_moneda, cant, nuevo_cambio, nuevo_monedasTotales), calculadas);
+				for(int cant = 0; cant <= CAMBIO / MONEDAS[tipo_moneda]; cant++) {
+					nueva = _backward(new Moneda(tipo_moneda, cant, 0, 0), calculadas);
 					
 					if(actual.vengo() == null) {
 						actual.setVengo(nueva);
@@ -179,6 +190,9 @@ public class P3 {
 //						System.out.println("\t\tPor: " + nueva.toString());
 						actual.setVengo(nueva);
 					}
+					
+					actual.setCambio(actual.valorMoneda() * actual.cantidad() + nueva.cambio());
+					actual.setMonedasTotales(actual.cantidad() + nueva.monedasTotales());
 				}
 			}
 			
