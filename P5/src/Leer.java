@@ -773,7 +773,7 @@ public class Leer {
     public String pedirString() {
 
         System.out.println("Introduce una cadena");
-        String cadena = sc.next();
+        String cadena = sc.nextLine();
 
         return cadena;
 
@@ -788,7 +788,7 @@ public class Leer {
     public String pedirString(String mensaje) {
 
         System.out.println(mensaje);
-        String cadena = sc.next();
+        String cadena = sc.nextLine();
 
         return cadena;
 
@@ -1926,11 +1926,11 @@ public class Leer {
                 sc.next();
             }
 
-            if (!(real >= minimo && real <= maximo)) {
+            if (real < minimo || real > maximo) {
                 System.out.println("Error, Introduce un numero double entre " + minimo + " y " + maximo + " como maximo");
             }
 
-        } while (!(real >= minimo && real <= maximo));
+        } while (real < minimo || real > maximo);
 
         return real;
     }
