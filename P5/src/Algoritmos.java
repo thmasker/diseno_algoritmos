@@ -76,7 +76,11 @@ public class Algoritmos{
 	
 	//	Estima el resultado según las ocurrencias obtenidas en el porcentaje comparado
 	private int estimarOcurrencias(int ocurrencias) {
-		return lineas * ocurrencias / calcularPorcentaje();
+		try {
+			return lineas * ocurrencias / calcularPorcentaje();	
+		} catch(ArithmeticException e) {
+			return 0;
+		}
 	}
 	
 	public int fuerzaBruta() throws IOException{
