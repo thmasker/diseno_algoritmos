@@ -60,7 +60,7 @@ public class Algoritmos{
 		String nuevaLinea;
 		
 		do {
-			lineaLeer = ThreadLocalRandom.current().nextInt(0, lineas + 1);
+			lineaLeer = ThreadLocalRandom.current().nextInt(1, lineas + 1);
 		} while(elegidas.contains(lineaLeer));
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
