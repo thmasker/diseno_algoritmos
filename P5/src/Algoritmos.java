@@ -83,6 +83,34 @@ public class Algoritmos{
 		}
 	}
 	
+	public int karpRabin() throws IOException {
+		int lineasRestantes = calcularPorcentaje();
+		ArrayList<Integer> elegidas = new ArrayList<Integer>();
+		ArrayList<Integer> ocurrencias = new ArrayList<Integer>();
+		String texto;
+		
+		while(lineasRestantes > 0) {
+			texto = elegirLinea(elegidas);
+			ocurrencias = karpRabin(ocurrencias, patron, texto);
+			lineasRestantes--;
+		}
+		
+		return estimarOcurrencias(ocurrencias.size());
+	}
+	
+	private ArrayList<Integer> karpRabin(ArrayList<Integer> ocurrencias, String patron, String texto){
+		if(patron.length() > 0 && texto.length() >= patron.length()) {
+			int m = patron.length();
+			for(int n = 0; n <= texto.length()-m; n++) {
+				String aux = texto.substring(n,  n+m);
+				if(aux.hashCode() == patron.hashCode() && aux.equals(patron))
+					ocurrencias.add(n);
+			}
+		}
+		
+		return ocurrencias;
+	}
+	
 	public int fuerzaBruta() throws IOException{
 		int lineasRestantes = calcularPorcentaje();
 		ArrayList<Integer> elegidas = new ArrayList<Integer>();
