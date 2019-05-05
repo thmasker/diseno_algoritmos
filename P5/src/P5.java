@@ -32,9 +32,9 @@ public class P5 {
 		
 		System.out.println("\n---------- Algoritmo Boyer-Moore ----------");
 		inicio = System.nanoTime();
-//		int boyerMoore = algoritmo.fuerzaBruta();
+		int boyerMoore = algoritmo.boyerMoore();
 		tiempoBoyerMoore = System.nanoTime() - inicio;
-//		System.out.println("\tOcurrencias en el texto: " + boyerMoore);
+		System.out.println("\tOcurrencias en el texto: " + boyerMoore);
 		System.out.printf("\tTiempo de ejecución: %d ns\n", tiempoBoyerMoore);
 
 		System.out.println("\nHecho por Alberto Velasco Mata y Diego Pedregal Hidalgo, 2019 (C)");

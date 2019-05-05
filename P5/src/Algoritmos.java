@@ -83,6 +83,105 @@ public class Algoritmos{
 		}
 	}
 	
+	public int boyerMoore() throws IOException {
+		int lineasRestantes = calcularPorcentaje();
+		ArrayList<Integer> elegidas = new ArrayList<Integer>();
+		ArrayList<Integer> ocurrencias = new ArrayList<Integer>();
+		String texto;
+		
+		while(lineasRestantes > 0) {
+			texto = elegirLinea(elegidas);
+			ocurrencias = boyerMoore(ocurrencias, patron, texto);
+			lineasRestantes--;
+		}
+		
+		return estimarOcurrencias(ocurrencias.size());
+	}
+	
+	private ArrayList<Integer> boyerMoore(ArrayList<Integer> ocurrencias, String patron, String texto){
+		if(patron.length() > 0 && texto.length() >= patron.length()) {
+			ArrayList<Character> occChar = new ArrayList<Character>();
+			ArrayList<Integer> occPos = new ArrayList<Integer>();
+			
+			iniciaOcc(occChar, occPos, patron);
+			
+			int [] s = new int[patron.length()+1];
+			int [] f = new int[patron.length()+1];
+			
+			preproceso1(s, f, patron);
+			preproceso2(s, f, patron);
+			
+			boyerMoore(patron, texto, s, ocurrencias, occChar, occPos);
+		}
+		
+		return ocurrencias;
+	}
+	
+	private void boyerMoore(String patron, String texto, int [] s, ArrayList<Integer> ocurrencias,
+			ArrayList<Character> occChar, ArrayList<Integer> occPos) {
+		int i = 0, j;
+		
+		while(i <= texto.length() - patron.length()) {
+			j = patron.length() - 1;
+			
+			while(j >= 0 && patron.charAt(j) == texto.charAt(i+j))
+				j--;
+			
+			if(j < 0) {
+				ocurrencias.add(i);
+				i += s[0];
+			} else {
+				int aux = -1;
+				
+				if(occChar.contains(texto.charAt(i+j)))
+					aux = occPos.get(occChar.indexOf(texto.charAt(i+j)));
+				
+				i += Math.max(s[j+1], j - aux);
+			}
+		}
+	}
+	
+	private void iniciaOcc(ArrayList<Character> occChar, ArrayList<Integer> occPos, String patron) {
+		for(int n = patron.length() - 1; n >= 0; n--) {
+			if(!occChar.contains(patron.charAt(n))) {
+				occChar.add(patron.charAt(n));
+				occPos.add(n);
+			}
+		}
+	}
+	
+	private void preproceso1(int [] s, int [] f, String patron) {
+		int i = patron.length(), j = i + 1;
+		
+		f[i] = j;
+		
+		while(i > 0) {
+			while(j <= patron.length() && patron.charAt(i - 1) != patron.charAt(j - 1)) {
+				if(s[j] == 0)
+					s[j] = j - i;
+				
+				j = f[j];
+			}
+			
+			i--;
+			j--;
+			
+			f[i] = j;
+		}
+	}
+	
+	private void preproceso2(int [] s, int [] f, String patron) {
+		int j = f[0];
+		
+		for (int i = 0; i <= patron.length(); i++) {
+			if(s[i] == 0)
+				s[i] = j;
+			
+			if(i == j)
+				j = f[j];
+		}
+	}
+	
 	public int karpRabin() throws IOException {
 		int lineasRestantes = calcularPorcentaje();
 		ArrayList<Integer> elegidas = new ArrayList<Integer>();
