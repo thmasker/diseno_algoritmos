@@ -41,8 +41,8 @@ public class P4 {
 		 * CÁLCULO DEL VOLUMEN CON EL TEOREMA DEL VALOR MEDIO
 		 */
 		double[] intervaloVM = new double[2];
-		public double intervaloInfVM() { return intervaloP[0]; }
-		public double intervaloSupVM() { return intervaloP[1]; }
+		public double intervaloInfVM() { return intervaloVM[0]; }
+		public double intervaloSupVM() { return intervaloVM[1]; }
 		public String intervaloConfVM() { return "(" + intervaloInfVM() + ", " + intervaloSupVM() + ")"; }
 		
 		private void setIntervaloConfVM(double[] valores) {
@@ -66,15 +66,16 @@ public class P4 {
 		public double volumenNumericoVM(int k) {
 			double[] valores = new double[k];
 			double suma = 0.0d;
-			
-			for(int n = 0; n < k;) {
-				double x = Math.random()*radio;
-				double y = Math.random()*radio;
-				if((Math.sqrt(x*x + y*y) < radio)) {
-					double z = altura - altura*Math.sqrt(x*x + y*y)/radio;
-					valores[n] = Math.PI*radio*radio*z;
-					suma = suma+valores[n++];
-				}
+			for(int n = 0; n < k; n++) {
+				double x, y;
+				do {
+					x = Math.random()*radio;
+					y = Math.random()*radio;
+				} while((Math.sqrt(x*x + y*y) > radio));
+				
+				double z = altura - altura*Math.sqrt(x*x + y*y)/radio;
+				valores[n] = Math.PI*radio*radio*z;
+				suma = suma+valores[n];
 			}
 			setIntervaloConfVM(valores);
 			return suma/k;
