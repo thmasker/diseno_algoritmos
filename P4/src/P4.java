@@ -19,7 +19,6 @@ public class P4 {
 		public String intervaloConfP() { return "(" + intervaloInfP() + ", " + intervaloSupP() + ")"; }
 		
 		private void setIntervaloConfP(double p, int n) {
-			System.out.println("p="+p);
 			intervaloP[0] = p - 1.96*Math.sqrt(p*(1-p)/n);
 			intervaloP[1] = p + 1.96*Math.sqrt(p*(1-p)/n);
 		}
@@ -90,11 +89,15 @@ public class P4 {
 	}
 	
 	public static void main(String[] args) {
-		int radio = 1;
-		int altura = 1;
-		int puntosP = 1000000;
-		int medidasVM = 1000000;
+		int radio, altura, puntosP, medidasVM;
 		
+		System.out.println("-------------	Tamañito S.A. (¡Calcula el volumen!)	-------------\n");
+		
+		Leer leer = new Leer();
+		radio = leer.pedirIntPositivo("Introduce el radio del cono: ");
+		altura = leer.pedirIntPositivo("Introduce la altura del cono: ");
+		puntosP = leer.pedirIntPositivo("Introduce la cantidad de puntos para la estimación por proporciones: ");
+		medidasVM = leer.pedirIntPositivo("Introduce la cantidad de medidas para la estimación por valor medio: ");
 		
 		
 		Cono c = new Cono(radio, altura);
@@ -104,5 +107,8 @@ public class P4 {
 		
 		System.out.println("Valor medio (" + medidasVM + " medidas): " + c.volumenNumericoVM(medidasVM));
 		System.out.println("\tIntervalo de confianza: " + c.intervaloConfVM());
+		
+		System.out.println("\nHecho por Alberto Velasco Mata y Diego Pedregal Hidalgo, 2019 (C)");
+		System.out.println("Sin derechos reservados :(");
 	}
 }
