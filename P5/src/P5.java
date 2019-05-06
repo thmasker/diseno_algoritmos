@@ -6,13 +6,15 @@ public class P5 {
 		
 		Leer leer = new Leer();
 		String patron, archivo = "quijote1.txt";
-		double porcentaje;
+		double porcentaje=0.0;
+		do {
 		
-		System.out.println("-------------	BuscaBusca S.A. (¡encuentra el patrón!)	-------------\n");
+		System.out.println("-------------	BuscaBusca S.A. (ï¿½encuentra el patrï¿½n!)	-------------\n");
 		
-		patron = leer.pedirString("Introduce el patrón a buscar:");
+		patron = leer.pedirString("Introduce el patrï¿½n a buscar:");
 		
 		porcentaje = leer.pedirDoubleRango(0.0, 100.0, "Introduce el porcentaje de texto para estimar:");
+		leer.pedirString();
 
 		Algoritmos algoritmo = new Algoritmos(patron, archivo, porcentaje, 187);
 		
@@ -21,22 +23,22 @@ public class P5 {
 		int fuerzaBruta = algoritmo.fuerzaBruta();
 		tiempoFuerzaBruta = System.nanoTime() - inicio;
 		System.out.println("\tOcurrencias en el texto: " + fuerzaBruta);
-		System.out.printf("\tTiempo de ejecución: %d ns\n", tiempoFuerzaBruta);
+		System.out.printf("\tTiempo de ejecuciï¿½n: %d ns\n", tiempoFuerzaBruta);
 		
 		System.out.println("\n---------- Algoritmo Karp-Rabin ----------");
 		inicio = System.nanoTime();
 		int karpRabin = algoritmo.karpRabin();
 		tiempoKarpRabin = System.nanoTime() - inicio;
 		System.out.println("\tOcurrencias en el texto: " + karpRabin);
-		System.out.printf("\tTiempo de ejecución: %d ns\n", tiempoKarpRabin);
+		System.out.printf("\tTiempo de ejecuciï¿½n: %d ns\n", tiempoKarpRabin);
 		
 		System.out.println("\n---------- Algoritmo Boyer-Moore ----------");
 		inicio = System.nanoTime();
 		int boyerMoore = algoritmo.boyerMoore();
 		tiempoBoyerMoore = System.nanoTime() - inicio;
 		System.out.println("\tOcurrencias en el texto: " + boyerMoore);
-		System.out.printf("\tTiempo de ejecución: %d ns\n", tiempoBoyerMoore);
-
+		System.out.printf("\tTiempo de ejecuciï¿½n: %d ns\n", tiempoBoyerMoore);
+		}while(porcentaje>0);
 		System.out.println("\nHecho por Alberto Velasco Mata y Diego Pedregal Hidalgo, 2019 (C)");
 		System.out.println("Sin derechos reservados :(");
 	}
